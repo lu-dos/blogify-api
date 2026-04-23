@@ -38,7 +38,6 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next(); // Ne hash que si le mot de passe a été modifié ou est nouveau
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Méthode d'instance pour comparer un mot de passe en clair avec le hash || source: https://stackoverflow.com/questions/14588032/mongoose-password-hashing
