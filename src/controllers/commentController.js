@@ -1,15 +1,18 @@
-const Comment = require('../models/Comment');
-const Post = require('../models/Post');
+const Comment = require("../models/Comment");
+const Post = require("../models/Post");
 
-// POST /posts/:postId/comments
 const createComment = async (req, res) => {
   try {
     const { content } = req.body;
-    if (!content) return res.status(400).json({ message: 'Contenu requis' });
+
+    if (!content) {
+      return res.status(400).json({ message: "Content is required" });
+    }
 
     const post = await Post.findById(req.params.postId);
-    if (!post || post.status === 'deleted') {
-      return res.status(404).json({ message: 'Article introuvable' });
+
+    if (!post || post.status === "deleted") {
+      return res.status(404).json({ message: "Post not found" });
     }
 
     const comment = await Comment.create({
@@ -17,61 +20,74 @@ const createComment = async (req, res) => {
       author: req.user._id,
       post: req.params.postId,
     });
-    res.status(201).json({ message: 'Commentaire ajouté', comment });
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+
+    res.status(201).json(comment);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// GET /posts/:postId/comments
 const getCommentsByPost = async (req, res) => {
   try {
-    const comments = await Comment.find({ post: req.params.postId, status: 'active' })
-      .populate('author', 'username')
+    const comments = await Comment.find({
+      post: req.params.postId,
+      status: "active",
+    })
+      .populate("author", "username")
       .sort({ createdAt: -1 });
+
     res.status(200).json(comments);
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// PUT /comments/:id
 const updateComment = async (req, res) => {
   try {
+    const { content } = req.body;
     const comment = await Comment.findById(req.params.id);
-    if (!comment || comment.status === 'deleted') {
-      return res.status(404).json({ message: 'Commentaire introuvable' });
-    }
-    if (comment.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Accès refusé' });
+
+    if (!comment || comment.status === "deleted") {
+      return res.status(404).json({ message: "Comment not found" });
     }
 
-    const { content } = req.body;
-    if (content) comment.content = content;
+    if (comment.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    comment.content = content || comment.content;
     await comment.save();
-    res.status(200).json({ message: 'Commentaire modifié', comment });
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// DELETE /comments/:id (soft delete)
 const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
-    if (!comment || comment.status === 'deleted') {
-      return res.status(404).json({ message: 'Commentaire introuvable' });
-    }
-    if (comment.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Accès refusé' });
+
+    if (!comment || comment.status === "deleted") {
+      return res.status(404).json({ message: "Comment not found" });
     }
 
-    comment.status = 'deleted';
+    if (comment.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    comment.status = "deleted";
     await comment.save();
-    res.status(200).json({ message: 'Commentaire supprimé' });
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+
+    res.status(200).json({ message: "Comment deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { createComment, getCommentsByPost, updateComment, deleteComment };
+module.exports = {
+  createComment,
+  getCommentsByPost,
+  updateComment,
+  deleteComment,
+};
