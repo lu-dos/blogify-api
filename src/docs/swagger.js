@@ -7,6 +7,7 @@ const options = {
       title: "Blogify API",
       version: "1.0.0",
       description: "API pour une application de blogging",
+    },
     servers: [
       {
         url: "http://localhost:3000",
@@ -30,3 +31,4 @@ const options = {
   apis: ["./routes/*.js"],
 };
 module.exports = swaggerJsdoc(options);
+
