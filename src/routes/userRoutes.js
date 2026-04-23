@@ -1,10 +1,20 @@
-const express = require("express");
-const { register, login } = require("../controllers/userController");
+const express = require('express');
+const {
+  register,
+  login,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require('../controllers/userController');
+const auth = require('../middleware/auth');
 
-const router = express.Router(); // Crée un routeur Express pour les routes utilisateur
+const router = express.Router();
 
-// Routes d'authentification
-router.post("/register", register);
-router.post("/login", login);
+router.post('/register', register);
+router.post('/login', login);
+
+router.get('/:id', auth, getUserById);
+router.put('/:id', auth, updateUser);
+router.delete('/:id', auth, deleteUser);
 
 module.exports = router;

@@ -6,12 +6,12 @@ const createComment = async (req, res) => {
     const { content } = req.body;
 
     if (!content) {
-      return res.status(400).json({ message: "Content is required" });
+      return res.status(400).json({ message: "Contenu requis" });
     }
 
     const post = await Post.findById(req.params.postId);
 
-    if (!post || post.status === "deleted") {
+    if (!post || post.status === "Supprimé") {
       return res.status(404).json({ message: "Post not found" });
     }
 

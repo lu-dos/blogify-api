@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Route de test
 app.get("/", (req, res) => {
-  res.json({ message: "Blogify API est en ligne 🚀" });
+  res.json({ message: "Blogify API est en ligne" });
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

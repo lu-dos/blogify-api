@@ -6,8 +6,7 @@ const options = {
     info: {
       title: "Blogify API",
       version: "1.0.0",
-      description: "API for a blogging application",
-    },
+      description: "API pour une application de blogging",
     servers: [
       {
         url: "http://localhost:3000",

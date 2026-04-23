@@ -6,7 +6,7 @@ const toggleLike = async (req, res) => {
     const post = await Post.findById(req.params.postId);
 
     if (!post || post.status === "deleted") {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ message: "Post introuvable" });
     }
 
     const existingLike = await Like.findOne({
@@ -16,7 +16,7 @@ const toggleLike = async (req, res) => {
 
     if (existingLike) {
       await existingLike.deleteOne();
-      return res.status(200).json({ message: "Like removed" });
+      return res.status(200).json({ message: "Like enlevé" });
     }
 
     await Like.create({
@@ -24,9 +24,9 @@ const toggleLike = async (req, res) => {
       post: req.params.postId,
     });
 
-    res.status(201).json({ message: "Post liked" });
+    res.status(201).json({ message: "Post liké" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Erreur du serveur" });
   }
 };
 
@@ -42,7 +42,7 @@ const getLikesByPost = async (req, res) => {
       likes,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Erreur du serveur" });
   }
 };
 
