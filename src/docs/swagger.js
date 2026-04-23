@@ -6,7 +6,7 @@ const options = {
     info: {
       title: "Blogify API",
       version: "1.0.0",
-      description: "API pour une application de blogging",
+      description: "",
     },
     servers: [
       {
