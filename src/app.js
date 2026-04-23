@@ -1,11 +1,14 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require("./routes/userRoutes");
 
-const postRoutes = require('./routes/postRoutes');
+const postRoutes = require("./routes/postRoutes");
 
-const commentRoutes = require('./routes/commentRoutes');
+const commentRoutes = require("./routes/commentRoutes");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swagger");
 
 const app = express();
 
@@ -14,15 +17,16 @@ app.use(cors());
 app.use(express.json());
 
 // Route de test
-app.get('/', (req, res) => {
-  res.json({ message: 'Blogify API est en ligne 🚀' });
+app.get("/", (req, res) => {
+  res.json({ message: "Blogify API est en ligne 🚀" });
 });
 
-app.use('/users', userRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('/posts', postRoutes);
+app.use("/users", userRoutes);
 
-app.use('/comments', commentRoutes);
+app.use("/posts", postRoutes);
 
+app.use("/comments", commentRoutes);
 
 module.exports = app;
