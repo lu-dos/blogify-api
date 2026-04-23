@@ -3,6 +3,8 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 
+const postRoutes = require('./routes/postRoutes');
+
 const app = express();
 
 // Middlewares globaux
@@ -15,5 +17,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/posts', postRoutes);
 
 module.exports = app;
