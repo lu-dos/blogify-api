@@ -11,7 +11,7 @@ const generateToken = (userId) => { //crée un JWT signé avec JWT_SECRET || sou
 
 // POST /users/register
 exports.register = async (req, res) => {
-  try {
+  try { // try pour gérer les erreurs potentielles lors de la création de l'utilisateur
     const { username, email, password } = req.body;
 
     // Vérifie si l'email ou le username existe déjà
@@ -47,9 +47,9 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     // Chercher l'utilisateur par email
-    const user = await User.findOne({ email, status: 'active' });
+    const user = await User.findOne({ email, status: 'active' }); // active => user soft-deleted ne peut pas se connecter
     if (!user) {
-      return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+      return res.status(401).json({ message: 'Email ou mot de passe incorrect' }); // erreur 401 pour une authentification échouée || source: https://developer.mozilla.org/fr/docs/Web/HTTP/Status/401
     }
 
     // Vérifier le mot de passe
