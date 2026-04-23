@@ -5,6 +5,8 @@ const userRoutes = require('./routes/userRoutes');
 
 const postRoutes = require('./routes/postRoutes');
 
+const commentRoutes = require('./routes/commentRoutes');
+
 const app = express();
 
 // Middlewares globaux
@@ -17,6 +19,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRoutes);
+
 app.use('/posts', postRoutes);
+
+app.use('/comments', commentRoutes);
+
 
 module.exports = app;
